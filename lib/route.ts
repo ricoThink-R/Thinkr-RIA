@@ -15,26 +15,23 @@ export var  Method = HttpMethod;
  */
 export var Router : RouterDecorator=(app:any)=>{
     /**
-    *   @v: ControllerDefination
-    *   @k: ActionDefination
+    *   @action: ActionDefination
     **/
-    console.log(ControllerMap.__Items);
-    ControllerMap.__Items.forEach((v,k) => {
-        var path = Format('/{0}/{1}',v.name,k.name);
-        console.log(path);
-        var router = app.route(path);
-        if (k.method===HttpMethod.Get) {
+    ControllerMap.__Items.forEach((action,i) => {
+        var router = app.route(action.path);
+        if (action.method===HttpMethod.Get) {
             router.get((req,res)=>{
                 var paras : ArrayLike<any> = [req,res];
-                Reflect.apply(k.func,null,paras);
+                Reflect.apply(action.value,null,paras);
+                action.next.call(action);
             })
         }
-        if (k.method===HttpMethod.Post) {
+        if (action.method===HttpMethod.Post) {
             router.post((req,res)=>{
                 var paras : ArrayLike<any> = [req,res];
-                Reflect.apply(k.func,null,paras);
+                Reflect.apply(action.value,null,paras);
+                action.next.call(action);
             })
         }
-
     });
 }

@@ -1,26 +1,41 @@
 
-import {ControllerDefination,ActionDefination} from './define/types.d';
-import {ActionDecorator} from './define/decorators.d';
-import {Controller} from './controller';
+import {ActionDefination} from './define/types.d';
+import {ActionDecorator,CallbackDecorator} from './define/decorators.d';
+import {Format} from './utils';
 
-///
-///
-///
+/**
+ * 此处更新为 action 与  回调
+ */
 export class ControllerMap {
-    static __Items: Map<ActionDefination, ControllerDefination> = new Map();
+    /**
+     * Map<行为,回调函数>
+     */
+    // static __Items: Map<ActionDefination, Function> = new Map();
+
+    static __Items: Array<ActionDefination> = [];
 }
 
 /**
- * @name 行为装饰器
- * <param name="parm" type="ActionConfig">要介绍的名字</param>
+ * 行为装饰器
+ * @param : parm 行为配置参数
  */
 export var Action: ActionDecorator = (parm) => {
     return (target: any, key, descrptor: PropertyDescriptor) => {
         var action: ActionDefination = {
-            name: parm.name,
-            func: descrptor.value,
-            method: parm.method
+            path: Format('/{0}/{1}',parm.ctrl,parm.name),
+            value: descrptor.value,
+            method: parm.method,
+            next:null
         }
-        ControllerMap.__Items.set(action, Controller(parm.ctrl));
+        ControllerMap.__Items.push(action);
+    }
+}
+
+export var Callback:CallbackDecorator = (next)=>{
+    return (target: any, key, descrptor: PropertyDescriptor) => {
+        ControllerMap.__Items.forEach((action,i)=>{
+            if (action.value===descrptor.value) //同一个方法
+            action.next = next;
+        });
     }
 }

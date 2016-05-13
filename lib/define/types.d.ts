@@ -3,73 +3,67 @@
 import {HttpMethod} from './enums';
 
 /**
- * @name 服务器配置参数。
+ *  服务器配置参数。
  */
-export type HostConfig ={
+export type HostConfig = {
     /**
-     * @name 端口
+     *  端口
      */
-    PORT:number,
+    PORT: number,
     /**
-     * @name 跨域
+     *  跨域
      */
-    CORS:any,
+    CORS: any,
     /**
-     * @name 模版引擎
+     *  模版引擎
      */
-    ENGINE:any,
+    ENGINE: any,
     /**
-     * @name 服务器应用程序
+     *  服务器应用程序
      */
-    APP:any
+    APP: any
 }
 
 
 
 
 /**
- * @name MVC 行为配置参数
+ *  MVC 行为配置参数
  */
-export type ActionConfig={
+export type ActionConfig = {
     /**
-     * @name 行为名称
+     * 行为名称
      */
-    name:string,
+    name: string,
     /**
-     * @name 控制器名称
+     *  控制器名称
      */
-    ctrl:string,
+    ctrl: string,
     /**
-     * @name 行为提交方法
+     *  行为提交方法
      */
-    method:HttpMethod
+    method: HttpMethod
 }
 
 
 /**
- * @name 控制器声明
+ *  行为器声明
  */
-export type ControllerDefination={
+export type ActionDefination = {
     /**
-     * @name 控制器名称
+     *  名称
      */
-    name:string
-}
-
-/**
- * @name 行为器声明
- */
-export type ActionDefination={
+    path: string,
     /**
-     * @name 名称
+     *  函数
      */
-    name:string,
+    value: Function,
     /**
-     * @name 函数
+     *  回调
      */
-    func:Function,
+    next: Function,
     /**
-     * @name 数据操作方法
+     *  数据操作方法
      */
-    method:HttpMethod
+    method: HttpMethod
 }
