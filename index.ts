@@ -4,5 +4,5 @@
  * Method : get,post(已经实现),put,delete
  */
 export {Router,Method} from './lib/route';
-export {Action} from './lib/action';
+export {Action,Callback} from './lib/action';
 export {ActionConfig} from './lib/define/types.d';
