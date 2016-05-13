@@ -1,6 +1,6 @@
 
 
-## Thinkr-RIA
+## Thinkr-Mook
 
 **此模块是在Express.JS的基础上进行了再次的封装。目的是为了简化MVC项目中 Controller 和 Action 的声明**
 
@@ -16,7 +16,7 @@ npm install express --save
 + 安装此模块
 
 ```git
-npm install thinkr-ria --save
+npm install thinkr-mook --save
 ```
 + 在你项目的根目录中添加任意类文件，例如
 
@@ -27,7 +27,7 @@ hello.ts
 + 添加对于模块的引用
 
 ```ts
-    import {Action,Method} from 'thinkr-ria'
+    import {Action,Method} from 'thinkr-mook'
 ```
 + 添加类代码
 
