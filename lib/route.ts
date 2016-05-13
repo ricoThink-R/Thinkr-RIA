@@ -9,7 +9,9 @@ import {Format} from './utils';
 
 export var  Method = HttpMethod;
 /**
- * @name 路由装饰器实现
+ * @name 路由装饰器实现。
+ * @desc
+ * @param app:express.Express 接口对象。
  */
 export var Router : RouterDecorator=(app:any)=>{
     /**

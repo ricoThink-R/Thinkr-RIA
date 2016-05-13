@@ -1,5 +1,5 @@
 {
-  "name": "thinkr-ria",
+  "name": "thinkr-mook",
   "version": "1.0.0",
   "description": "this is a easy use framework of node.js dependence express",
   "main": "index.js",
@@ -7,5 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rico Wang",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricoThink-R/Thinkr-RIA.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ricoThink-R/Thinkr-RIA/issues"
+  },
+  "homepage": "https://github.com/ricoThink-R/Thinkr-RIA#readme"
 }

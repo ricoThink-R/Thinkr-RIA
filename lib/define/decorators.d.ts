@@ -1,6 +1,6 @@
 
 
-import {ActionConfig} from './types';
+import {ActionConfig,HostConfig} from './types';
 
 /**
  * @name 服务器装饰器接口
