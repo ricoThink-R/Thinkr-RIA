@@ -1,6 +1,6 @@
 {
   "name": "thinkr-mook",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "this is a easy use framework of node.js dependence express",
   "main": "index.js",
   "scripts": {
