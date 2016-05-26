@@ -2,7 +2,7 @@
 
 ## Thinkr-Mook
 
-**此模块是在Express.JS的基础上进行了再次的封装。目的是为了简化MVC项目中 Controller 和 Action 的声明**
+**此模块是在Express.JS的基础上进行了再次的封装。目的是为通过简单的代码对与mongodb数据库数据实现RESTFUL形式的数据提供服务。**
 
 整体项目是需要提前安装 `Express` 模块的。
 
@@ -15,56 +15,99 @@ npm install express --save
 
 + 安装此模块
 
-```git
+```py
 npm install thinkr-mook --save
 ```
-+ 在你项目的根目录中添加任意类文件，例如
++ 在你项目中添加实体类
 
-```git
-hello.ts
+```py
+User.ts
 ```
-
-+ 添加对于模块的引用
++ 添加对于模块的引用，并添加实体类代码
 
 ```ts
-    import {Action,Method} from 'thinkr-mook'
-```
-+ 添加类代码
+import {Entity,Property} from 'thinkr-mook'
 
-```ts
-export class Hello{
-
+@Entity
+export class User{
+    @Property
+    name:string;
+    @Property
+    password:string;
 }
 ```
 
-+ 在本类中添加任意方法，并使用 `Action` 装饰器。
++ 在项目中添加数据服务类
+
+```py
+UserService.ts
+```
++ 添加对于模块的引用，并通过装饰器注入实体类完成代码
 
 ```ts
-export class Hello{
-    @Action({
-        name:'abc',         //此处是行为的名称
-        ctrl:'hello',       //此处是控制器名称
-        method:Method.Get   //此处是请求方法
-    })
-    public world(req,res){
-        /* 方法中适用的参数:
-        req是 express 模块中的 express.Request.
-        res是 express 模块中的 express.Response.
-        */
-        res.send("hello world");
+import {ServiceProvider} from 'thinkr-mook'
 
-    }
-}
+@ServiceProvider({
+    model:User
+})
+class UserService {}
 ```
 
-+ 在根目录添加`app.ts`文件作为项目启动文件, 并在此文件中添加对于`express` 模块的引用
++ 在根目录添加`app.ts`文件作为项目启动文件, 并在此文件中添加对于`express`和`mongoose` 模块的引用
 
-```git
-import * as express from 'express'
+
+```ts
+import * as express from 'express';
+import * as mongoose from 'mongoose';
 ```
 
-+ 导入所声明`hello.ts`
++ 导入模块的引用
 
-```git
-import {Hello} from './hello'
+```ts
+    import {Routing} from 'thinkr-mook'
 ```
+
++ 导入所声明`UserService.ts`
+
+```ts
+import {UserService} from './UserService'
+```
+
++ 完整的`app.ts`代码
+
+```ts
+import * as express from 'express';
+import * as mongoose from 'mongoose';
+import {Routing} from 'thinkr-mook'
+import {UserService} from './UserService'
+
+var app = express();
+app.listen(3000);
+mongoose.connect('mongodb://127.0.0.1/数据库');
+/**注册数据服务
+*
+*  可在项目中添加多个服务类，最终注册时，以数组形式传入到路由中
+*/
+Routing(app,[Service]);
+```
+
+完成后即可启动服务器，所需要的CRUD方法都通过模块注入而生成。
+
+访问地址按以下规则：
+
+在`http://地址:端口/实体类名`基础上
+
++   `/list`   **GET**  获取数据
++   `/create` **POST** 添加数据
++   `/update` **POST** 修改数据
++   `/delete` **POST** 删除数据
+
+如实例代码中的`User`类，接口为：
+```url
+http://127.0.0.1:3000/user/list
+http://127.0.0.1:3000/user/create
+http://127.0.0.1:3000/user/update
+http://127.0.0.1:3000/user/delete
+```
+
+结果以JSON形式返回。
