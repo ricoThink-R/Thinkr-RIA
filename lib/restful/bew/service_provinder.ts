@@ -15,39 +15,27 @@ export var ServiceProvider =(config:ServiceConfig)=>{
     var _findAll=(req,res)=>{
         var query=model.find(null);
         var promise = query.exec();
-        promise.addBack((err,docs)=>{
-            if (err){
-                console.log(err);
-                return res.json(err);
-            }if (!docs)
-            {
-                console.log("not found");
-                return res.json('not found!');
-            }
-            console.log(docs);
-            return res.json(docs);
-        });
+        __addback(req,res,promise);
     };
 
-    var __update = (req,res,service)=>{}
-    var __create =(req,res)=>{
+    var __update = (req,res)=>{
+        var query = model.update({_id:req.body._id},req.body);
+        var promise = query.exec();
+        __addback(req,res,promise);
 
-        var m = new model({
-            name:req.query.name,
-            price:req.query.price,
-            number:req.query.number,
-            type:req.query.type
-        });
-        m.save((err,d)=>{
-            if (err) return res.send(err);
-            return res.json(d);
-        });
-        return "not found";
+    }
+    var __create =(req,res)=>{
+        var promise =model.create(req.body);
+        __addback(req,res,promise);
     }
 
     var __delete= (req,res)=>{
-        var query = model.remove({_id:req.query.id});
+        var query = model.remove({_id:req.body._id});
         var promise = query.exec();
+        __addback(req,res,promise);
+    }
+
+    var __addback=(req,res,promise)=>{
         promise.addBack((err,docs)=>{
             if (err){
                 console.log(err);
@@ -62,16 +50,16 @@ export var ServiceProvider =(config:ServiceConfig)=>{
     }
     return (service)=>{
         // 给服务类添加默认的 CRUD 操作
-        Reflector.SetPropertyOrMethod(service,'__findAll',{
+        Reflector.SetPropertyOrMethod(service,'__findAll__',{
             name:`/${entity.name}/list`,func:_findAll
         });
-        Reflector.SetPropertyOrMethod(service,'__create',{
+        Reflector.SetPropertyOrMethod(service,'__create__',{
             name:`/${entity.name}/create`,func:__create
         });
-        Reflector.SetPropertyOrMethod(service,'__update',{
-            name:`/${entity.name}/create`,func:__update
+        Reflector.SetPropertyOrMethod(service,'__update__',{
+            name:`/${entity.name}/update`,func:__update
         });
-        Reflector.SetPropertyOrMethod(service,'__delete',{
+        Reflector.SetPropertyOrMethod(service,'__delete__',{
             name:`/${entity.name}/delete`,func:__delete
         });
     }

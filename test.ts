@@ -1,9 +1,11 @@
 import * as mongoose from 'mongoose';
 import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import {Entity,Property,ServiceProvider,Routing} from './index';
 
 var app = express();
 app.listen(3000);
+app.use(bodyParser());
 mongoose.connect('mongodb://127.0.0.1/thinkr');
 
 

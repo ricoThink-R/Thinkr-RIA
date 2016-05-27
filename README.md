@@ -2,12 +2,17 @@
 
 ## Thinkr-Mook
 
+**声明**
+1.0.4版本漏掉了update方法的源码，以及create方法路由指定错误.现已修正。。。。
+
 **此模块是在Express.JS的基础上进行了再次的封装。目的是为通过简单的代码对与mongodb数据库数据实现RESTFUL形式的数据提供服务。**
 
-整体项目是需要提前安装 `Express` 模块的。
+整体项目是需要提前安装 `Express`,`mongoose`,`body-parser` 模块的。
 
 ``` py
 npm install express --save
+npm install mongoose --save
+npm install body-parser --save
 
 ```
 
@@ -15,99 +20,111 @@ npm install express --save
 
 + 安装此模块
 
-```py
-npm install thinkr-mook --save
-```
+    ```py
+    npm install thinkr-mook --save
+    ```
 + 在你项目中添加实体类
 
-```py
-User.ts
-```
+    ```py
+    User.ts
+    ```
 + 添加对于模块的引用，并添加实体类代码
 
-```ts
-import {Entity,Property} from 'thinkr-mook'
+    ```ts
+    import {Entity,Property} from 'thinkr-mook'
 
-@Entity
-export class User{
-    @Property
-    name:string;
-    @Property
-    password:string;
-}
-```
+    @Entity
+    export class User{
+        @Property
+        name:string;
+        @Property
+        password:string;
+    }
+    ```
 
 + 在项目中添加数据服务类
 
-```py
-UserService.ts
-```
+    ```py
+    UserService.ts
+    ```
 + 添加对于模块的引用，并通过装饰器注入实体类完成代码
 
-```ts
-import {ServiceProvider} from 'thinkr-mook'
+    ```ts
+    import {ServiceProvider} from 'thinkr-mook'
 
-@ServiceProvider({
-    model:User
-})
-class UserService {}
-```
+    @ServiceProvider({
+        model:User
+    })
+    class UserService {}
+    ```
 
 + 在根目录添加`app.ts`文件作为项目启动文件, 并在此文件中添加对于`express`和`mongoose` 模块的引用
 
-
-```ts
-import * as express from 'express';
+    ```ts
+    import * as express from 'express';
 import * as mongoose from 'mongoose';
-```
+    ```
 
 + 导入模块的引用
 
-```ts
-    import {Routing} from 'thinkr-mook'
-```
+    ```ts
+        import {Routing} from 'thinkr-mook'
+    ```
 
 + 导入所声明`UserService.ts`
 
-```ts
-import {UserService} from './UserService'
-```
+    ```ts
+    import {UserService} from './UserService'
+    ```
 
 + 完整的`app.ts`代码
 
-```ts
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import {Routing} from 'thinkr-mook'
-import {UserService} from './UserService'
+    ```ts
+    import * as express from 'express';
+    import * as mongoose from 'mongoose';
+    import {Routing} from 'thinkr-mook'
+    import {UserService} from './UserService'
 
-var app = express();
-app.listen(3000);
-mongoose.connect('mongodb://127.0.0.1/数据库');
-/**注册数据服务
-*
-*  可在项目中添加多个服务类，最终注册时，以数组形式传入到路由中
-*/
-Routing(app,[Service]);
-```
+    var app = express();
+    app.listen(3000);
+    mongoose.connect('mongodb://127.0.0.1/数据库');
+    /**注册数据服务
+    *
+    *  可在项目中添加多个服务类，最终注册时，以数组形式传入到路由中
+    */
+    Routing(app,[Service]);
+    ```
 
-完成后即可启动服务器，所需要的CRUD方法都通过模块注入而生成。
++ 完成后即可启动服务器，所需要的CRUD方法都通过模块注入而生成。
 
-访问地址按以下规则：
+### 访问说明
 
-在`http://地址:端口/实体类名`基础上
++ 访问地址在`http://地址:端口/实体类名`基础上
 
-+   `/list`   **GET**  获取数据
-+   `/create` **POST** 添加数据
-+   `/update` **POST** 修改数据
-+   `/delete` **POST** 删除数据
+    +   `/list`   **GET**  获取数据
+    +   `/create` **POST** 添加数据
+    +   `/update` **POST** 修改数据
+    +   `/delete` **POST** 删除数据
 
-如实例代码中的`User`类，接口为：
-```url
-http://127.0.0.1:3000/user/list
-http://127.0.0.1:3000/user/create
-http://127.0.0.1:3000/user/update
-http://127.0.0.1:3000/user/delete
-```
+    如实例代码中的`User`类，接口为：
+    ```url
+    http://127.0.0.1:3000/user/list
+    http://127.0.0.1:3000/user/create
+    http://127.0.0.1:3000/user/update
+    http://127.0.0.1:3000/user/delete
+    ```
 
-结果以JSON形式返回。
++ 发送POST请求时 所有参数均以
+    ```js
+    'content-type': 'application/x-www-form-urlencoded'
+    ```
+    形式提交。
+
++ 参数列表：
+
+    +   /list           -->无。
+    +   /craete         -->实体类对象。
+    +   /update         -->包含_id的实体类对象。
+    +   /delete         -->_id:实体类对象_id属性。
+
+    结果以JSON形式返回。
